@@ -10,15 +10,25 @@ library(DemoTools)
 
 #Carregando demais pacotes
 
-pacman::p_load(dplyr, stringr,foreign,tidyverse,ggplot2,factoextra)
+pacman::p_load(dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl)
 
 #Carregando os bancos
 
-#(...)
+pop2000 <- read_excel("pop2000.xltx")
+pop2010 <- read_excel("pop2010.xltx")
+pop2015 <- read_excel("pop2015.xltx")
+pop2020 <- read_excel("pop2020.xltx")
+pop2030 <- read_excel("pop2030.xltx")
+
+
 
 #Preparando os bancos
 
-#(...)
+pop2015 <- na.omit(pop2015)
+pop2020 <- na.omit(pop2020)
+pop2030 <- na.omit(pop2030)
+
+
 
 #Exercícios:
 #1) 
