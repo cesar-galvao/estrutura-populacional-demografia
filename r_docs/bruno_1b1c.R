@@ -10,7 +10,7 @@ library(DemoTools)
 
 #Carregando demais pacotes
 
-pacman::p_load(dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS)
+pacman::p_load(dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS,reshape2,XML,plyr)
 
 #Carregando os bancos
 
@@ -286,6 +286,113 @@ razao2030
 #
 ##### Não vou utilizar a tabela  SINGAGE por empatia ao Cesar. Ao invés, utilizarei o pacote  DemoTools.
 #
+# Bancos: declarada,datanasc,presumida.
+# Dados extraídos do censo de 2000 para o acre, para uma mesma população, segundo, na ordem; Idade declarada, Data de nascimento e Idade presumida.
+#
+declarada
+#Total: declarada[,1]
+presumida
+#Total: presumida[,1]
+datanasc
+#Total: datanasc[,1]
+
+idadedeclarada <- 0:(length(declarada[,1])-1)
+
+plot(idadedeclarada, declarada[,1], type = 'o')  
+
+# Whipple Index
+# Using this assumption over a 5-year range, Whipple’s index measures heaping usually in numbers ending in zero or five. 
+# This index is a summary measure that determines variability in the quality of age reporting between regions or countries and its evolution over time.
+# Usually this index is calculated for digits 0 and 5 in adult ages 25 to 60. The uniformity assumption is less useful outside of this range.
+
+#Declarada:
+Wideclarada <-  check_heaping_whipple(declarada[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
+Wideclarada
+#  1.079055
+#
+#Presumida:
+Wipresumida <-  check_heaping_whipple(presumida[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
+Wipresumida
+# 1.427128
+#
+#Data de nascimento:
+Widatanasc <-  check_heaping_whipple(datanasc[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
+Widatanasc
+#1.063955
+
+# The result varies from 1, which means no concentration around numbers ending in zero or five, to a maximum of 5 (or 10 if only a single digit is tested). 
+# The selection of calculating the index for ages 25-60 is arbitrary but it has been found to be suitable for practical purposes (United Nations 1955)
+#[Análise]
 
 
-#(...)
+
+
+
+# Myers
+# The method determines the proportion of the population whose age ends in each terminal digit (0-9), also varying the particular starting age for 
+# any 10-year age group. It is based on the principle that in the absence of age heaping, the population aggregated on each terminal digits 0-9 
+# should represent roughly 10 percent of the total population.
+
+# Declarada:
+Mideclarada <- check_heaping_myers(declarada[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
+Mideclarada
+# 2.059559
+#
+# Presumida:
+Mipresumida <- check_heaping_myers(presumida[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
+Mipresumida
+# 10.88078
+#
+#Data de nascimento:
+Midatanasc <- check_heaping_myers(datanasc[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
+Midatanasc
+# 1.767307
+
+# Myers index, 40.55 in this case, expresses the extent of concentration on or avoidance of a particular digit (Myers 1954). 
+# The theoretical range of Myers index is 0, representing no heaping (perfect uniformity over digits), to 90, which would result if 
+# all ages were reported at a single terminal digit (Siegel Jacob and Swanson David 2004).
+# [Análise]
+
+
+
+
+
+#Bachi
+# With the previous formulas, Bachi’s index involves applying the Whipple method repeatedly to determine the extent of preference for each final digit.
+# Similarly to Myers, it equals the sum of the positive deviations from 10 percent (Bachi 1951). It has a theoretical range from 0 to 90, 
+# AND 10% is the expected value for each digit. Therefore, the results of Bachi’s method is similar to those obtained by Myers’ index.
+
+# Declarada:
+Bideclarada <- check_heaping_bachi(declarada[,1], idadedeclarada, ageMin = 20, ageMax = 90)
+Bideclarada
+# 1.966324
+#
+# Presumida:
+Bipresumida <- check_heaping_bachi(presumida[,1], idadedeclarada, ageMin = 20, ageMax = 90)
+Bipresumida
+# 10.28615
+#
+#Data de nascimento:
+Bidatanasc <- check_heaping_bachi(datanasc[,1], idadedeclarada, ageMin = 20, ageMax = 90)
+Bidatanasc
+#1.697535
+#
+
+#[Análise]
+
+
+
+
+
+
+#Pirâmide;
+#Modelo:
+
+pyramidGH <- ggplot(popGHcens, aes(x = Age, y = Population, fill = Gender)) + 
+  geom_bar(data = subset(popGHcens, Gender == "Female"), stat = "identity") + 
+  geom_bar(data = subset(popGHcens, Gender == "Male"), stat = "identity") + 
+  scale_y_continuous(labels = paste0(as.character(c(seq(2, 0, -1), seq(1, 2, 1))), "m")) + 
+  coord_flip()
+pyramidGH
+
+# ???
