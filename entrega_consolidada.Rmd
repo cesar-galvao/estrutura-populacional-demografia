@@ -1,0 +1,154 @@
+---
+author: "Ana Luiza Almeida, Bruno Gondim Toledo, César A. Galvão, Hermes Winarski"
+title: "Estudo de caso: estrutura populacional e projeções para o estado do Acre"
+subtitle: "Demografia - Profa. Ana Maria Nogales"
+date: "Brasília, Outubeo/2021"
+output:
+  html_document:
+    df_print: paged
+    highlight: textmate
+    includes:
+      in_header: "./imagens/banner.html"
+    number_sections: no
+    theme: flatly
+    toc: no
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+---
+
+<!-- font-family: "Times New Roman", Times, serif; -->
+
+<style type="text/css">
+h1.title {
+  font-size: 37px;
+  text-align: center;
+}
+
+h3.subtitle {
+  text-align: center;
+}
+
+h4.author { /* Header 4 - and the author and data headers use this too  */
+  font-size: 18px;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 18px;
+  color: DarkBlue;
+  text-align: center;
+}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+#knitr::opts_chunk$set(fig.align = 'center')
+#knitr::opts_chunk$set(fig.width=7*0.8, fig.height=5*0.8)
+pacman::p_load(dplyr,knitr,kableExtra,DT,plotly)
+
+source('aux-source.R', encoding = 'UTF-8')
+
+```
+
+
+
+
+
+<br>
+
+# {#inic .tabset}
+
+## Estrutura Populacional e avaliação da informação sobre idade
+
+### Pirâmides etárias por grupos de idade
+
+<br>
+TEXTO
+
+
+```{r, fig.align='center'}
+
+```
+<br>
+
+
+### Indicadores de estrutura por idade
+
+TEXTO
+
+<br>
+
+### Qualidade da declaração de idade no Censo 2000
+
+TEXTO
+
+
+<br>
+<br>
+
+<center>[Início](#inic) </center>
+
+<br>
+<br>
+
+
+## Projeção de População
+
+### Metodologia de projeção e estimação da população
+
+<br>
+
+TEXTO INTRODUTORIO?
+
+<br>
+
+#### Metodologia utilizada para projetar a população do país segundo UF
+
+<br>
+
+TEXTO
+
+<br>
+
+#### Metodologia para estimar populações dos municípios brasileiros
+
+<br>
+
+TEXTO
+
+<br>
+
+### Projeção da população do Acre de 2010 a 2020
+
+
+<br>
+
+TEXTO
+
+<br>
+
+
+### Comparações de pirâmides etárias
+
+
+<br>
+
+TEXTO
+
+<br>
+
+
+
+<br>
+<br>
+
+<center>[Início](#inic) </center>
+
+<br>
+<br>
+
+
+
+
