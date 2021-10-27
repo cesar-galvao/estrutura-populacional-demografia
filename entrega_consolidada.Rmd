@@ -2,7 +2,7 @@
 author: "Ana Luiza Almeida, Bruno Gondim Toledo, César A. Galvão, Hermes Winarski"
 title: "Estudo de caso: estrutura populacional e projeções para o estado do Acre"
 subtitle: "Demografia - Profa. Ana Maria Nogales"
-date: "Brasília, Outubeo/2021"
+date: "Brasília, Outubro/2021"
 output:
   html_document:
     df_print: paged
@@ -40,10 +40,13 @@ h4.date { /* Header 4 - and the author and data headers use this too  */
 }
 </style>
 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 knitr::opts_chunk$set(warning = FALSE)
+#knitr::opts_chunk$set(include = FALSE)
 #knitr::opts_chunk$set(fig.align = 'center')
 #knitr::opts_chunk$set(fig.width=7*0.8, fig.height=5*0.8)
 pacman::p_load(dplyr,knitr,kableExtra,DT,plotly)
@@ -51,7 +54,6 @@ pacman::p_load(dplyr,knitr,kableExtra,DT,plotly)
 source('aux-source.R', encoding = 'UTF-8')
 
 ```
-
 
 
 
@@ -65,88 +67,97 @@ source('aux-source.R', encoding = 'UTF-8')
 ### Pirâmides etárias por grupos de idade
 
 <br>
-Pirâmides etárias são um gráficos organizados para categorizar a população de uma determinada localidade conforme as faixas de idade, dividindo-as por sexo. As barras inferiores representam a população mais jovem e as barras superiores representam a população mais velha. Do lado direito do eixo, se quantifica a população feminina e, do lado esquerdo, a população masculina. Essas populações foram colocadas em porcentagem, sempre com relação a população total da localidade. Esses gráficos são de suma importância para que se possa entender a evolução da população e para que se possa elaborar planejamentos de políticas públicas a longo prazo.
 
-A seguir, pode-se acompanhar a evolução da população do Acre ao longo dos anos  2000, 2010, 2015, 2020 e 2030.
+Pirâmides etárias são gráficos organizados para categorizar a população de uma determinada localidade conforme faixas de idade, dividindo-as por sexo. As barras inferiores representam a população mais jovem e as barras superiores representam a população mais velha. Essas populações estão descritas abaixo em porcentagem, sempre em relação à população total da localidade. Esses gráficos são importantes para que se possa visualizar a evolução da população e para que se possa elaborar planejamentos de políticas públicas de longo prazo.
+
+A seguir, pode-se acompanhar a evolução da população do Acre ao longo dos anos  2000, 2010, 2015, 2020 e 2030. Para todas as figuras, os nascidos homens são representados à esquerda e as nascidas mulheres são representadas à direita da pirâmide.
+
+<br>
+
+```{r piramides-projetadas-ate2030, fig.align='center', results='hide', fig.cap= "Figura 1: Pirâmides etárias para o Acre de 2000 a 2030 (projetado)", fig.topcaption = TRUE}
 
 
-```{r, fig.align='center'}
 #2000
 xy.pop2000<- pop2000$`Porcentagem M`
 xx.pop2000<- pop2000$`Porcentagem F`
-agelabels<-c("0-4","5-9","10-14","15-19","20-24","25-29","30-34",
-             "35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74",
-             "75-79","80+")
+agelabels<-c("0","5","10","15","20","25","30",
+             "35","40","45","50","55","60","65","70",
+             "75","80+")
 mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
 fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
 
+par(mfrow = c(2, 3))
+
 par(mar=pyramid.plot(xy.pop2000,xx.pop2000,labels=agelabels,
-                    main="Pirâmide etária da população do Acre em 2000",lxcol=mcol,rxcol=fcol,
-                    gap=0.5,show.values=TRUE))
+                    main="2000",lxcol=mcol,rxcol=fcol,
+                    gap=0.5,show.values=TRUE,
+                    top.labels =c("","","")))
 
 
 #2010
 xy.pop2010<- pop2010$`Porcentagem M`
 xx.pop2010<- pop2010$`Porcentagem F`
-agelabels<-c("0-4","5-9","10-14","15-19","20-24","25-29","30-34",
-             "35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74",
-             "75-79","80+")
+
 mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
 fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
 
 par(mar=pyramid.plot(xy.pop2010,xx.pop2010,labels=agelabels,
-                     main="Pirâmide etária da população do Acre em 2010",lxcol=mcol,rxcol=fcol,
-                     gap=0.5,show.values=TRUE))
+                     main="2010",lxcol=mcol,rxcol=fcol,
+                     gap=0.5,show.values=TRUE,
+                    top.labels =c("","","")))
 
 #2015
 xy.pop2015<- pop2015$`Porcentagem M`
 xx.pop2015<- pop2015$`Porcentagem F`
-agelabels<-c("0-4","5-9","10-14","15-19","20-24","25-29","30-34",
-             "35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74",
-             "75-79","80+")
+
 mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
 fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
 
 par(mar=pyramid.plot(xy.pop2015,xx.pop2015,labels=agelabels,
-                     main="Pirâmide etária da população do Acre em 2015",lxcol=mcol,rxcol=fcol,
-                     gap=0.5,show.values=TRUE))
+                     main="2015",lxcol=mcol,rxcol=fcol,
+                     gap=0.5,show.values=TRUE,
+                    top.labels =c("","","")))
 
 
 #2020
 xy.pop2020<- pop2020$`Porcentagem M`
 xx.pop2020<- pop2020$`Porcentagem F`
-agelabels<-c("0-4","5-9","10-14","15-19","20-24","25-29","30-34",
-             "35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74",
-             "75-79","80+")
+
 mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
 fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
 
 par(mar=pyramid.plot(xy.pop2020,xx.pop2020,labels=agelabels,
-                     main="Pirâmide etária da população do Acre em 2020",lxcol=mcol,rxcol=fcol,
-                     gap=0.5,show.values=TRUE))
+                     main="2020",lxcol=mcol,rxcol=fcol,
+                     gap=0.5,show.values=TRUE,
+                    top.labels =c("","","")))
 
 #2030
 xy.pop2030<- pop2030$`Porcentagem M`
 xx.pop2030<- pop2030$`Porcentagem F`
-agelabels<-c("0-4","5-9","10-14","15-19","20-24","25-29","30-34",
-             "35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74",
-             "75-79","80+")
+
 mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
 fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
 
 par(mar=pyramid.plot(xy.pop2030,xx.pop2030,labels=agelabels,
-                     main="Pirâmide etária da população do Acre",lxcol=mcol,rxcol=fcol,
-                     gap=0.5,show.values=TRUE))
+                     main="2030",lxcol=mcol,rxcol=fcol,
+                     gap=0.5,show.values=TRUE,
+                    top.labels =c("","","")))
 
 
 ```
+
 <br>
 
+**INSERIR AQUI comentários sobre transição demográfica**
+
+<br>
+<br>
 
 ### Indicadores de estrutura por idade
 
 TEXTO
 
+<br>
 <br>
 
 ### Qualidade da declaração de idade no Censo 2000
@@ -167,25 +178,27 @@ TEXTO
 
 ### Metodologia de projeção e estimação da população
 
-<br>
-
-Estimar e projetar a população de uma nação é de suma importâcia para que os governantes saibam em que se pautar na hora de cirar políticas de assistência à população que nela reside. Existem diversas formas de se estimar uma população, diversas metodologias. Nos textos a seguir, são discutidos alguns métodos aplicados no Brasil. 
+Estimar e projetar a população de uma nação é de suma importâcia para que governos tenham balizadores para a criação e gestão de políticas de assistência à população que nela reside. A seguir são discutidos alguns métodos de estimação da população aplicados no Brasil. 
 
 <br>
 
 #### Metodologia utilizada para projetar a população do país segundo UF
 
-<br>
+O método usado para projetar a população do país segundo UF é chamado de Método das Componentes Demográficas, o qual incorpora tendências futuras do comportamento da fecundidade, mortalidade e migração. Além disso, fornece projeções populacionais segundo sexo e grupos de idade através da equação compensadora da demografia ou equação de equilíbrio populacional. 
 
-O método usado para projetar a população do país segundo UF é chamado de método das componentes demográficas, o qual incorpora tendências futuras do comportamento da fecundidade, mortalidade e migração, fornece projeções populacionais segundo sexo e grupos de idade, através da equação compensadora da demografia ou equação de equilíbrio populacional. No entanto, sua aplicação não constitui uma tarefa fácil, pois, para estabelecer hipóteses a respeito do futuro das três componentes demográficas, são necessárias informações estatísticas de qualidade e, quanto menor o tamanho da população, mais difícil a obtenção de dados confiáveis, devido, principalmente, à variabilidade ao acaso a que estão sujeitos os pequenos domínios. Assim, o Método das Componentes não pode ser aplicado em qualquer tipo de população, mas apenas naquelas que possuem indicadores de fecundidade, mortalidade e migração consistentes. Portanto, devido a alguns problemas de acessibilidade a informações de qualidade em áreas mais carentes, e como um todo, sobre a mortalidade, pode ser que esse não seja exatamente o método mais interessante para a execução dessas projeções. 
+No entanto, sua aplicação não constitui uma tarefa fácil pois, para estabelecer hipóteses a respeito do futuro das três componentes demográficas, são necessárias informações estatísticas de qualidade e, quanto menor o tamanho da população, mais difícil a obtenção de dados confiáveis. Isto se dá principalmente pela variabilidade aleatória a que estão sujeitos em pequenos domínios. Assim, o Método das Componentes não pode ser aplicado em qualquer tipo de população, mas apenas naquelas que possuem indicadores de fecundidade, mortalidade e migração consistentes. 
+
+Portanto, devido a problemas de acessibilidade a informações de qualidade em áreas mais carentes, e, como um todo, sobre a mortalidade, pode ser que esse não seja o método mais aplicável para a execução dessas projeções. 
 
 <br>
 
 #### Metodologia para estimar populações dos municípios brasileiros
 
-<br>
+O método utilizado para estimar populações de municípios se chama Método AiBi, aplicado pela primeira vez no Brasil por Madeira e Simões. Nele se observa a tendência de crescimento populacional do município - entre dois censos demográficos consecutivos - em relação à tendência de crescimento de uma área geográfica de área maior. Ou seja, considera que as populações dos domínios menores são uma função linear da população do domínio maior. 
 
-Já o método utilizado para estimar populações de municípios se chama Método AiBi, aplicado pela primeira vez no Brasil por Madeira e Simões. Nele se observa a tendência de crescimento populacional do município - entre dois censos demográficos consecutivos - em relação à tendência de crescimento de uma área geográfica de área maior, ou seja, considera que as populações dos domínios menores são uma função linear da população do domínio maior. A desvantagem do método é que, por não haver barreias para as participações relativas, podem aparecer populações negativas, como alguns estudos mostraram. Então, não é recomendado utilizá-lo para projeções populacionais com prospectivas muito extensas, na verdade, o recomendado pelo método é que o período utilizado para projeção exige informações de período do mesmo tamanho no passado. Na teoria, esse método é recomendado quando as áreas menores estão em declínio populacional ou apresentam crescimento pequeno e, também, quando o padrão de crescimento populacional nas pequenas áreas não é o mesmo da área maior. É compreensível o uso desse método para essas projeções dos municípios já que, em períodos curtos, ele aparenta ter todas as ferramentas necessárias para fazer essa estimação com precisão. Além disso, o fato de que as projeções de população para cada Unidade de Federação do Brasil estão disponibilizadas pelo IBGE por meio do método das componentes demográficas, ajuda na projeção dos municípios que se utilizam dessas áreas maiores para então chegar nas informações das áreas menores. 
+A desvantagem do método é que, por não haver barreiras para as participações relativas, podem aparecer populações negativas. Então, não é recomendado utilizá-lo para projeções populacionais com prospectivas muito extensas. Na verdade, o recomendado pelo método é que o período projetado utilize informações de período do mesmo tamanho no passado. 
+
+Em teoria, esse método é recomendado quando as áreas menores estão em declínio populacional ou apresentam crescimento pequeno, assim como quando o padrão de crescimento populacional nas pequenas áreas não é o mesmo da área maior. É compreensível o seu uso para projeções dos municípios já que, em períodos curtos, ele aparenta ter todas as ferramentas necessárias para fazer essa estimação com precisão. Além disso, o fato de que as projeções de população para cada Unidade da Federação do Brasil são disponibilizadas pelo IBGE por meio do método das componentes demográficas ajuda na projeção dos municípios que se utilizam dessas áreas maiores para então chegar nas informações das áreas menores. 
 
 <br>
 
