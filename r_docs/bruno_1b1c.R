@@ -10,7 +10,7 @@ library(DemoTools)
 
 #Carregando demais pacotes
 
-pacman::p_load(dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS,reshape2,XML,plyr)
+pacman::p_load(dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS,reshape2,XML,plyr,plotrix)
 
 #Carregando os bancos
 
@@ -81,7 +81,17 @@ teste2000
 teste2000[1] + teste2000[2] + teste2000[3] + teste2000[4]
 #0.5081539
 #Idade mediana: 15-19 anos
-#Idade média teria que ter os valores individuais para  fazer a proporção, portanto, não é possível fazer com esse banco. Seguimos.
+
+#Idade média: 
+pop2000
+idademedia <- c(2,7,12,17,22,27,32,37,42,47,52,57,62,67,72,77,80,1)
+pop2000$media <- idademedia
+pop2000$cmedia <- pop2000$Total * pop2000$media
+pop2000
+sum(pop2000$cmedia[1:17])
+media2000 <- sum(pop2000$cmedia[1:17]) / 557526
+media2000
+#Idade média: 23.44234
 #
 #
 #
@@ -121,6 +131,17 @@ teste2015
 teste2015[1] + teste2015[2] + teste2015[3] + teste2015[4]+ teste2015[5]
 #0.5257177
 #Idade mediana: 20-24 anos
+
+#Idade média: 
+pop2015
+idademedia
+pop2015$media <- idademedia
+pop2015$cmedia <- pop2015$Total * pop2015$media
+pop2015
+media2015 <- sum(pop2015$cmedia[1:17]) / pop2015$Total[18]
+media2015
+#Idade média: 26.42038
+
 #
 #
 #
@@ -160,6 +181,17 @@ teste2020
 teste2020[1] + teste2020[2] + teste2020[3] + teste2020[4]+ teste2020[5]+ teste2020[6]
 #0.5257177
 #Idade mediana: 25-29 anos
+
+#Idade média: 
+pop2020
+idademedia
+pop2020$media <- idademedia
+pop2020$cmedia <- pop2020$Total * pop2020$media
+pop2020
+media2020 <- sum(pop2020$cmedia[1:17]) / pop2020$Total[18]
+media2020
+#Idade média: 28.03636
+
 #
 #
 #
@@ -200,6 +232,16 @@ teste2010[1] + teste2010[2] + teste2010[3] + teste2010[4]+ teste2010[5]
 #0.5378545
 #Idade mediana: 20-24 anos
 
+#Idade média: 
+pop2010
+idademedia
+pop2010$media <- idademedia
+pop2010$cmedia <- pop2010$Total * pop2010$media
+pop2010
+media2010 <- sum(pop2010$cmedia[1:17]) / pop2010$Total[18]
+media2010
+#Idade média: 25.95028
+
 #Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. Comente os resultados.
 
 razao2010  <- pop2010
@@ -211,6 +253,10 @@ razao2010
 razao2010$razaomasc <- razao2010$Masculino/razao2010$Total
 razao2010$razaofem <- razao2010$Feminino/razao2010$Total
 razao2010
+
+#gráfico de série
+#adicionar ano, bindar com 2030, graficar com série, tirar razaofem
+
 # A razão de população por sexo segue uma homogeneidade,  em nenhum momento a população total de homens ou de mulheres chega a  2%. Para as idades
 # entre 0 a 4; 5 a  9;10 a 14; e depois 60 a 64; 70 a 74 e 75 a 79, a proporção de homens é ligeiramente maior. No restante, a de mulheres é ligeira-
 # mente  superior.
@@ -255,6 +301,16 @@ teste2030
 teste2030[1] + teste2030[2] + teste2030[3] + teste2030[4]+ teste2030[5]+ teste2030[6]
 #0.5378545
 #Idade mediana: 25-29 anos
+
+#Idade média: 
+pop2030
+idademedia
+pop2030$media <- idademedia
+pop2030$cmedia <- pop2030$Total * pop2030$media
+pop2030
+media2030 <- sum(pop2030$cmedia[1:17]) / pop2030$Total[18]
+media2030
+#Idade média: 31.65193
 
 #Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. Comente os resultados.
 
@@ -387,12 +443,159 @@ Bidatanasc
 
 #Pirâmide;
 #Modelo:
+#por idade simples:
+xy.pop2000<- declarada$Homens
+xx.pop2000<- declarada$Mulheres
+agelabels<-c("0","1","2","3","4","5","6",
+             "7","8","9","10","11","12","13","14",
+             "15","16","17","18","19","20","21","22",
+             "23","24","25","26","27" , "28" , "29" , "30" ,
+             "31" , "32" , "33",  "34"  ,"35" , "36" , "37" ,
+             "38",  "39",  "40"  ,"41" , "42" , "43" , "44" ,
+             "45" , "46" , "47",  "48"  ,"49" , "50" ,"51",  
+             "52" , "53" , "54" , "55"  ,"56" , "57" , "58" ,
+             "59" , "60" , "61" , "62",  "63",  "64" , "65",  "66",
+             "67" , "68" , "69",  "70"  ,"71" , "72" , "73" , "74" , "75" ,
+             "76" , "77" , "78" , "79" ,"80" , "81" , "82" , "83",  "84" ,
+             "85" , "86"  ,"87" , "88",  "89",  "90" , "91", "92",  "93" , "94" ,
+             "95",  "96" , "97" , "98" , "99"  ,"100+")
+mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
+fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
 
-pyramidGH <- ggplot(popGHcens, aes(x = Age, y = Population, fill = Gender)) + 
-  geom_bar(data = subset(popGHcens, Gender == "Female"), stat = "identity") + 
-  geom_bar(data = subset(popGHcens, Gender == "Male"), stat = "identity") + 
-  scale_y_continuous(labels = paste0(as.character(c(seq(2, 0, -1), seq(1, 2, 1))), "m")) + 
-  coord_flip()
-pyramidGH
-
+par(mar=pyramid.plot(xy.pop2000,xx.pop2000,labels=agelabels,
+                     main="2000",lxcol=mcol,rxcol=fcol,
+                     gap=0.5,show.values=TRUE,
+                     top.labels =c("","","")))
 # ???
+#####################
+#Bindando a tabua de 2010 com a de 2030 para graficar
+razao2010
+razao2030
+
+bind1 <- razao2010
+summary(bind1)
+colnames(bind1) <- c("idade","masc","fem","total","razaomasc","razaofem")
+bind1$ano <- "2010"
+bind1$ano <- as.numeric(bind1$ano)
+
+bind3 <- razao2030
+summary(bind3)
+colnames(bind3) <- c("idade","masc","fem","total","razaomasc","razaofem")
+bind3$ano <- "2030"
+bind3$ano <- as.numeric(bind3$ano)
+
+
+bind <- bind_rows(bind1,bind3)
+bind
+bind$razaofem <- NULL
+###############################################################################################################################################################
+###############################################################################################################################################################
+###############################################################################################################################################################
+###############################################################################################################################################################
+###############################################################################################################################################################
+
+#Respostas:
+
+#b) Para todos os anos acima mencionados, calcule os indicadores de estrutura por idade (proporção de idosos (60 anos e mais),
+#proporção de crianças (0 a 4 anos), proporção de jovens (0 a 14 anos), razão de dependência e índice de envelhecimento).
+#Calcule a idade média e a idade mediana. Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. 
+#Comente os resultados.
+
+#2000:
+
+#Proporção de idosos: 0.05453378
+#Proporção de crianças: 0.1382662
+#Proporção de jovens: 0.3882348
+#Razão de dependência: 0.7404956
+#Índice de envelhecimento: 0.140466
+#Idade mediana: 17 anos
+#Idade média: 23.44234
+
+
+#2010:
+
+#Proporção de idosos: 0.06397031
+#Proporção de crianças: 0.1054653
+#Proporção de jovens: 0.3370281
+#Razão de dependência: 0.6135545
+#Índice de envelhecimento: 0.1898071
+#Idade mediana: 22 anos
+#Idade média: 25.95028
+
+#2015:
+
+#Proporção de idosos: 0.06498713
+#Proporção de crianças: 0.1068421
+#Proporção de jovens: 0.3279312
+#Razão de dependência: 0.5880959
+#Índice de envelhecimento: 0.198173
+#Idade mediana: 22 anos
+#Idade média: 26.42038
+
+#2020:
+
+#Proporção de idosos: 0.07609963
+#Proporção de crianças: 0.09396051
+#Proporção de jovens: 0.2943225
+#Razão de dependência: 0.5251386
+#Índice de envelhecimento: 0.2585587
+#Idade mediana: 27 anos
+#Idade média: 28.03636
+
+#2030:
+
+#Proporção de idosos: 0.105681
+#Proporção de crianças: 0.07418269
+#Proporção de jovens: 0.2356786
+#Razão de dependência: 0.4432296
+#Índice de envelhecimento: 0.4484116
+#Idade mediana: 27 anos
+#Idade média: 31.65193
+
+#Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. :
+#USAR A SEGUINTE TÁBUA[P/GRAFICAR]:
+
+bind
+
+# QUESTÃO C
+# c) Avalie a qualidade da declaração de idade no Censo 2000 segundo forma de declaração (data de nascimento e idade presumida). 
+# Calcule os índices de Whipple, Myers e Bachi. 
+# Construa a pirâmide por idade simples. Comente os resultados. (utilize a planilha SINGAGE do PAS - disponível na plataforma)
+
+#ÍNDICES SEGUNDO FORMA DE DECLARAÇÃO:
+# Data de nascimento:
+
+# índices de Myers: 1.767307
+# índices de Whipple: 1.063955
+# índices de Bachi: 1.697535
+
+# Idade presumida
+
+# índices de Myers: 10.88078
+# índices de Whipple: 1.427128
+# índices de Bachi: 10.28615
+
+# Pirâmide (idade simples):
+
+xy.pop2000<- declarada$Homens
+xx.pop2000<- declarada$Mulheres
+agelabels<-c("0","1","2","3","4","5","6",
+             "7","8","9","10","11","12","13","14",
+             "15","16","17","18","19","20","21","22",
+             "23","24","25","26","27" , "28" , "29" , "30" ,
+             "31" , "32" , "33",  "34"  ,"35" , "36" , "37" ,
+             "38",  "39",  "40"  ,"41" , "42" , "43" , "44" ,
+             "45" , "46" , "47",  "48"  ,"49" , "50" ,"51",  
+             "52" , "53" , "54" , "55"  ,"56" , "57" , "58" ,
+             "59" , "60" , "61" , "62",  "63",  "64" , "65",  "66",
+             "67" , "68" , "69",  "70"  ,"71" , "72" , "73" , "74" , "75" ,
+             "76" , "77" , "78" , "79" ,"80" , "81" , "82" , "83",  "84" ,
+             "85" , "86"  ,"87" , "88",  "89",  "90" , "91", "92",  "93" , "94" ,
+             "95",  "96" , "97" , "98" , "99"  ,"100+")
+mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
+fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
+
+par(mar=pyramid.plot(xy.pop2000,xx.pop2000,labels=agelabels,
+                     main="2000",lxcol=mcol,rxcol=fcol,
+                     gap=0.5,show.values=TRUE,
+                     top.labels =c("","","")))
