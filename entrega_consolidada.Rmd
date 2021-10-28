@@ -152,7 +152,7 @@ par(mar=pyramid.plot(xy.pop2030,xx.pop2030,labels=agelabels,
 
 <br>
 
-**INSERIR AQUI comentários sobre transição demográfica**
+Podemos observar que em 2000 o estado se encontrava em um período com a maior parte da população sendo de jovens e pouquissímos idosos. Isso pode configurar o Acre como na primeira fase da transição demográfica. Assim, com o passar do tempo, percebemos que população idosa cresce (em sinal de diminuição da mortalidade) e a da população infantil decresce. Até que chegamos em 2030, um ano que parece ser o período de bônus demográfico para a unidade da federação. Esse período é de quando a carga de dependência é a menor possível, ou seja, a população em idade ativa (15 anos a 60/65 anos) se sobrepõe à população dependente (0 a 15 anos e pessoas com mais de 60/65 anos). Percebemos isso, pois as porcentagens da população na idade ativa são as maiores do período. 
 
 <br>
 <br>
