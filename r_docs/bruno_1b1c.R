@@ -1,8 +1,8 @@
 #Instalando o DemoTools
 library(usethis)
 library(devtools)
-install.packages("rstan", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
-install_github("timriffe/DemoTools")
+#install.packages("rstan", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
+#install_github("timriffe/DemoTools")
 
 #Carregando o DemoTools
 library(Rcpp)
@@ -10,21 +10,21 @@ library(DemoTools)
 
 #Carregando demais pacotes
 
-pacman::p_load(dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS,reshape2,XML,plyr,plotrix)
+pacman::p_load(usethis, devtools, DemoTools, Rcpp, dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS,reshape2,XML,plyr,plotrix)
 
 #Carregando os bancos
 
-pop2000 <- read_excel("pop2000.xltx")
-pop2010 <- read_excel("pop2010.xltx")
-pop2015 <- read_excel("pop2015.xltx")
-pop2020 <- read_excel("pop2020.xltx")
-pop2030 <- read_excel("pop2030.xltx")
+pop2000 <- read_excel("data/pop2000.xltx")
+pop2010 <- read_excel("data/pop2010.xltx")
+pop2015 <- read_excel("data/pop2015.xltx")
+pop2020 <- read_excel("data/pop2020.xltx")
+pop2030 <- read_excel("data/pop2030.xltx")
 #Idade declarada
-declarada <- read_ods("total.ods")
+declarada <- read_ods("data/total.ods")
 #Idade presumida
-presumida <- read_ods("totalpres.ods")
+presumida <- read_ods("data/totalpres.ods")
 #Idade pela data de nascimento
-datanasc  <- read_ods("totalnas.ods")
+datanasc  <- read_ods("data/totalnas.ods")
 
 #Preparando os bancos
 
@@ -78,7 +78,7 @@ teste2000  <- teste2000[1:17]
 teste2000 <- teste2000/pop2000[18,4]
 teste2000
 
-teste2000[1] + teste2000[2] + teste2000[3] + teste2000[4]
+#teste2000[1] + teste2000[2] + teste2000[3] + teste2000[4]
 #0.5081539
 #Idade mediana: 15-19 anos
 
@@ -128,7 +128,7 @@ teste2015  <- teste2015[1:17]
 teste2015 <- teste2015/pop2015[18,4]
 teste2015
 
-teste2015[1] + teste2015[2] + teste2015[3] + teste2015[4]+ teste2015[5]
+#teste2015[1] + teste2015[2] + teste2015[3] + teste2015[4]+ teste2015[5]
 #0.5257177
 #Idade mediana: 20-24 anos
 
@@ -178,7 +178,7 @@ teste2020  <- teste2020[1:17]
 teste2020 <- teste2020/pop2020[18,4]
 teste2020
 
-teste2020[1] + teste2020[2] + teste2020[3] + teste2020[4]+ teste2020[5]+ teste2020[6]
+#teste2020[1] + teste2020[2] + teste2020[3] + teste2020[4]+ teste2020[5]+ teste2020[6]
 #0.5257177
 #Idade mediana: 25-29 anos
 
@@ -228,7 +228,7 @@ teste2010  <- teste2010[1:17]
 teste2010 <- teste2010/pop2010[18,4]
 teste2010
 
-teste2010[1] + teste2010[2] + teste2010[3] + teste2010[4]+ teste2010[5]
+#teste2010[1] + teste2010[2] + teste2010[3] + teste2010[4]+ teste2010[5]
 #0.5378545
 #Idade mediana: 20-24 anos
 
@@ -298,7 +298,7 @@ teste2030  <- teste2030[1:17]
 teste2030 <- teste2030/pop2030[18,4]
 teste2030
 
-teste2030[1] + teste2030[2] + teste2030[3] + teste2030[4]+ teste2030[5]+ teste2030[6]
+#teste2030[1] + teste2030[2] + teste2030[3] + teste2030[4]+ teste2030[5]+ teste2030[6]
 #0.5378545
 #Idade mediana: 25-29 anos
 
@@ -362,17 +362,17 @@ plot(idadedeclarada, declarada[,1], type = 'o')
 # Usually this index is calculated for digits 0 and 5 in adult ages 25 to 60. The uniformity assumption is less useful outside of this range.
 
 #Declarada:
-Wideclarada <-  check_heaping_whipple(declarada[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
+Wideclarada <-  DemoTools::check_heaping_whipple(declarada[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
 Wideclarada
 #  1.079055
 #
 #Presumida:
-Wipresumida <-  check_heaping_whipple(presumida[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
+Wipresumida <-  DemoTools::check_heaping_whipple(presumida[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
 Wipresumida
 # 1.427128
 #
 #Data de nascimento:
-Widatanasc <-  check_heaping_whipple(datanasc[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
+Widatanasc <-  DemoTools::check_heaping_whipple(datanasc[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
 Widatanasc
 #1.063955
 
@@ -390,17 +390,17 @@ Widatanasc
 # should represent roughly 10 percent of the total population.
 
 # Declarada:
-Mideclarada <- check_heaping_myers(declarada[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
+Mideclarada <- DemoTools::check_heaping_myers(declarada[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
 Mideclarada
 # 2.059559
 #
 # Presumida:
-Mipresumida <- check_heaping_myers(presumida[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
+Mipresumida <- DemoTools::check_heaping_myers(presumida[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
 Mipresumida
 # 10.88078
 #
 #Data de nascimento:
-Midatanasc <- check_heaping_myers(datanasc[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
+Midatanasc <- DemoTools::check_heaping_myers(datanasc[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
 Midatanasc
 # 1.767307
 
@@ -419,17 +419,17 @@ Midatanasc
 # AND 10% is the expected value for each digit. Therefore, the results of Bachi’s method is similar to those obtained by Myers’ index.
 
 # Declarada:
-Bideclarada <- check_heaping_bachi(declarada[,1], idadedeclarada, ageMin = 20, ageMax = 90)
+Bideclarada <- DemoTools::check_heaping_bachi(declarada[,1], idadedeclarada, ageMin = 20, ageMax = 90)
 Bideclarada
 # 1.966324
 #
 # Presumida:
-Bipresumida <- check_heaping_bachi(presumida[,1], idadedeclarada, ageMin = 20, ageMax = 90)
+Bipresumida <- DemoTools::check_heaping_bachi(presumida[,1], idadedeclarada, ageMin = 20, ageMax = 90)
 Bipresumida
 # 10.28615
 #
 #Data de nascimento:
-Bidatanasc <- check_heaping_bachi(datanasc[,1], idadedeclarada, ageMin = 20, ageMax = 90)
+Bidatanasc <- DemoTools::check_heaping_bachi(datanasc[,1], idadedeclarada, ageMin = 20, ageMax = 90)
 Bidatanasc
 #1.697535
 #
@@ -446,26 +446,28 @@ Bidatanasc
 #por idade simples:
 xy.pop2000<- declarada$Homens
 xx.pop2000<- declarada$Mulheres
-agelabels<-c("0","1","2","3","4","5","6",
-             "7","8","9","10","11","12","13","14",
-             "15","16","17","18","19","20","21","22",
-             "23","24","25","26","27" , "28" , "29" , "30" ,
-             "31" , "32" , "33",  "34"  ,"35" , "36" , "37" ,
-             "38",  "39",  "40"  ,"41" , "42" , "43" , "44" ,
-             "45" , "46" , "47",  "48"  ,"49" , "50" ,"51",  
-             "52" , "53" , "54" , "55"  ,"56" , "57" , "58" ,
-             "59" , "60" , "61" , "62",  "63",  "64" , "65",  "66",
-             "67" , "68" , "69",  "70"  ,"71" , "72" , "73" , "74" , "75" ,
-             "76" , "77" , "78" , "79" ,"80" , "81" , "82" , "83",  "84" ,
-             "85" , "86"  ,"87" , "88",  "89",  "90" , "91", "92",  "93" , "94" ,
-             "95",  "96" , "97" , "98" , "99"  ,"100+")
+# agelabels<-c("0","1","2","3","4","5","6",
+#              "7","8","9","10","11","12","13","14",
+#              "15","16","17","18","19","20","21","22",
+#              "23","24","25","26","27" , "28" , "29" , "30" ,
+#              "31" , "32" , "33",  "34"  ,"35" , "36" , "37" ,
+#              "38",  "39",  "40"  ,"41" , "42" , "43" , "44" ,
+#              "45" , "46" , "47",  "48"  ,"49" , "50" ,"51",
+#              "52" , "53" , "54" , "55"  ,"56" , "57" , "58" ,
+#              "59" , "60" , "61" , "62",  "63",  "64" , "65",  "66",
+#              "67" , "68" , "69",  "70"  ,"71" , "72" , "73" , "74" , "75" ,
+#              "76" , "77" , "78" , "79" ,"80" , "81" , "82" , "83",  "84" ,
+#              "85" , "86"  ,"87" , "88",  "89",  "90" , "91", "92",  "93" , "94" ,
+#              "95",  "96" , "97" , "98" , "99"  ,"100+")
+agelabels <- rep("", 101)
 mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
 fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
 
-par(mar=pyramid.plot(xy.pop2000,xx.pop2000,labels=agelabels,
-                     main="2000",lxcol=mcol,rxcol=fcol,
-                     gap=0.5,show.values=TRUE,
-                     top.labels =c("","","")))
+pyramid.plot(xy.pop2000,xx.pop2000,labels = agelabels,
+             main="2000",lxcol=mcol,rxcol=fcol,
+             gap=0.5,show.values=FALSE,
+             top.labels =c("","",""),
+             unit = "Contagem")
 # ???
 #####################
 #Bindando a tabua de 2010 com a de 2030 para graficar
@@ -474,18 +476,19 @@ razao2030
 
 bind1 <- razao2010
 summary(bind1)
-colnames(bind1) <- c("idade","masc","fem","total","razaomasc","razaofem")
+colnames(bind1) <- c("idade","masc","fem","total","media","cmedia","razaomasc","razaofem")
 bind1$ano <- "2010"
 bind1$ano <- as.numeric(bind1$ano)
 
 bind3 <- razao2030
 summary(bind3)
-colnames(bind3) <- c("idade","masc","fem","total","razaomasc","razaofem")
+colnames(bind3) <- c("idade","masc","fem","total","media","cmedia","razaomasc","razaofem")
 bind3$ano <- "2030"
 bind3$ano <- as.numeric(bind3$ano)
 
 
 bind <- bind_rows(bind1,bind3)
+bind["razaomasc"] <- bind["razaomasc"]*2
 bind
 bind$razaofem <- NULL
 ###############################################################################################################################################################
@@ -552,6 +555,17 @@ bind$razaofem <- NULL
 #Idade mediana: 27 anos
 #Idade média: 31.65193
 
+tabela_proporcoes <- tibble(
+  ano = c(2000, 2010, 2015, 2020, 2030),
+  prop_idosos = c(0.05453378, 0.06397031, 0.06498713, 0.07609963, 0.105681),
+  prop_criancas = c(0.1382662, 0.1054653, 0.1068421, 0.09396051, 0.07418269),
+  prop_jovens = c(0.3882348, 0.3370281, 0.3279312, 0.2943225, 0.2356786),
+  razao_dep = c(0.7404956, 0.6135545, 0.5880959, 0.5251386, 0.4432296),
+  ind_envel = c(0.140466, 0.1898071, 0.198173, 0.2585587, 0.4484116),
+  idade_mediana = c(17, 22, 22, 27, 27),
+  idade_media = c(23.44234, 25.95028, 26.42038, 28.03636, 31.65193)
+)
+
 #Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. :
 #USAR A SEGUINTE TÁBUA[P/GRAFICAR]:
 
@@ -579,26 +593,15 @@ bind
 
 xy.pop2000<- declarada$Homens
 xx.pop2000<- declarada$Mulheres
-agelabels<-c("0","1","2","3","4","5","6",
-             "7","8","9","10","11","12","13","14",
-             "15","16","17","18","19","20","21","22",
-             "23","24","25","26","27" , "28" , "29" , "30" ,
-             "31" , "32" , "33",  "34"  ,"35" , "36" , "37" ,
-             "38",  "39",  "40"  ,"41" , "42" , "43" , "44" ,
-             "45" , "46" , "47",  "48"  ,"49" , "50" ,"51",  
-             "52" , "53" , "54" , "55"  ,"56" , "57" , "58" ,
-             "59" , "60" , "61" , "62",  "63",  "64" , "65",  "66",
-             "67" , "68" , "69",  "70"  ,"71" , "72" , "73" , "74" , "75" ,
-             "76" , "77" , "78" , "79" ,"80" , "81" , "82" , "83",  "84" ,
-             "85" , "86"  ,"87" , "88",  "89",  "90" , "91", "92",  "93" , "94" ,
-             "95",  "96" , "97" , "98" , "99"  ,"100+")
+agelabels <- rep("", 101)
 mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
 fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
 
-par(mar=pyramid.plot(xy.pop2000,xx.pop2000,labels=agelabels,
-                     main="2000",lxcol=mcol,rxcol=fcol,
-                     gap=0.5,show.values=TRUE,
-                     top.labels =c("","","")))
+pyramid.plot(xy.pop2000,xx.pop2000,labels = agelabels,
+             main="2000",lxcol=mcol,rxcol=fcol,
+             gap=0.5,show.values=FALSE,
+             top.labels =c("","",""),
+             unit = "Contagem")
 
 # Removendo o lixo
 rm(bind1)
@@ -629,7 +632,7 @@ rm(razao2030)
 rm(Bipresumida)
 # essas acho que poderia dar problema em remover, mas talvez não:
 rm(ativo2030)
-rm(bind)
+
 rm(datanasc)
 rm(declarada)
 rm(piramide2000)
