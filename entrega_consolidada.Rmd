@@ -161,7 +161,7 @@ Podemos observar que em 2000 o estado se encontrava em um período com a maior p
 
 ### Indicadores de estrutura por idade
 
-```{r calculos-indicadores}
+```{r calculos-indicadores, echo = FALSE}
 
 pop2000 <- read_excel("data/pop2000.xltx")
 pop2010 <- read_excel("data/pop2010.xltx")
@@ -228,7 +228,7 @@ idademedia <- c(2,7,12,17,22,27,32,37,42,47,52,57,62,67,72,77,80,1)
 pop2000$media <- idademedia
 pop2000$cmedia <- pop2000$Total * pop2000$media
 
-sum(pop2000$cmedia[1:17])
+
 media2000 <- sum(pop2000$cmedia[1:17]) / 557526
 
 #Idade média: 23.44234
@@ -511,7 +511,7 @@ Bidatanasc <- DemoTools::check_heaping_bachi(datanasc[,1], idadedeclarada, ageMi
 
 
 bind1 <- razao2010
-summary(bind1)
+
 colnames(bind1) <- c("idade","masc","fem","total","media","cmedia","razaomasc","razaofem")
 bind1$ano <- "2010"
 bind1$ano <- as.numeric(bind1$ano)
@@ -528,6 +528,15 @@ bind["razaomasc"] <- bind["razaomasc"]*2
 
 bind$razaofem <- NULL
 
+bind["ano"] <- c(rep(2010, 18), rep(2030, 18))
+
+bind <- bind[-c(18, 36),]
+
+niveis_idade <- c(levels(as.factor(bind$idade))[1], levels(as.factor(bind$idade))[10], levels(as.factor(bind$idade))[2:9], levels(as.factor(bind$idade))[11:17])
+
+bind <- bind %>%
+  mutate(idade = factor(idade, levels = niveis_idade, labels = c('0-4', '5-9' ,'10-14', '15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79', '80+')),
+         razao = razaomasc/2)
 
 tabela_proporcoes <- tibble(
   ano = c(2000, 2010, 2015, 2020, 2030),
@@ -573,7 +582,7 @@ rm(Bipresumida)
 rm(ativo2030)
 
 rm(datanasc)
-rm(declarada)
+
 rm(piramide2000)
 rm(pop2000)
 rm(pop2010)
@@ -601,6 +610,59 @@ tabela_proporcoes %>%
 
 ```
 
+<br>
+
+É nítido o aumento da proporção de idosos na população, evidenciado pelo índice de envelhecimento. Em contrapartida a razão de dependência tem diminuído, possívelmente pela redução da população infantil. Esta hipótese pode ser sistentada pelo aumento da idade média e mediana.
+
+A seguir a razão de sexo é exposta em gráfico, para os anos de 2010 e 2030 (projetado). É possível observar uma maior estabilidade na razao de idade superior a 1 durantes os anos iniciais de 2030, mas uma drástica queda para os anos finais de vida. Se por um lado isso pode indicar menor mortalidade masculina na população jovem, indica abrupto aumento da mortalidade na população masculina mais velha.
+
+<br>
+
+```{r graf-razaosexo}
+#Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. :
+#USAR A SEGUINTE TÁBUA[P/GRAFICAR]:
+
+razao_sexo <- bind%>%
+  mutate(ano = as.character(ano))%>%
+  ggplot(aes(x = idade, y = razao, group = ano, color = ano))+
+  geom_line(size = 1)+
+  scale_color_manual(values = c("skyblue", "orange"), name = "Ano", labels = c("2010", "2030"))+
+  labs(x = "Grupos de idade")+
+  theme_bw()+
+  scale_x_discrete(breaks = c('0-4', '10-14', '20-24', '30-34', '40-44','50-54', '60-64',  '70-74',  '80+'))+
+  theme(axis.title.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "gray"))
+
+ggplotly(razao_sexo, tooltip = c('idade', 'razao', 'ano'))
+
+```
+
+<br>
+
+Quanto à qualidade da declaração de idade, 
+
+ÍNDICES SEGUNDO FORMA DE DECLARAÇÃO:
+ Data de nascimento:
+
+- índices de Myers: 1.767307
+- índices de Whipple: 1.063955
+- índices de Bachi: 1.697535
+
+Idade presumida
+
+- índices de Myers: 10.88078
+- índices de Whipple: 1.427128
+- índices de Bachi: 10.28615
+
+
+
+
+<br>
+
 ```{r piramide-idade-simples}
 xy.pop2000<- declarada$Homens
 xx.pop2000<- declarada$Mulheres
@@ -615,12 +677,7 @@ pyramid.plot(xy.pop2000,xx.pop2000,labels = agelabels,
              unit = "Contagem")
 ```
 
-```{r}
-#Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. :
-#USAR A SEGUINTE TÁBUA[P/GRAFICAR]:
 
-bind
-```
 
 
 <br>

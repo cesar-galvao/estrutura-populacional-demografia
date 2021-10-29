@@ -569,7 +569,12 @@ tabela_proporcoes <- tibble(
 #Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. :
 #USAR A SEGUINTE TÁBUA[P/GRAFICAR]:
 
-bind
+bind["ano"] <- c(rep(2010, 18), rep(2030, 18))
+
+bind <- bind[-c(18, 36),]
+
+bind %>%
+  mutate()
 
 # QUESTÃO C
 # c) Avalie a qualidade da declaração de idade no Censo 2000 segundo forma de declaração (data de nascimento e idade presumida). 
