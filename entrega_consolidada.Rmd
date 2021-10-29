@@ -54,6 +54,8 @@ knitr::opts_chunk$set(warning = FALSE)
 #knitr::opts_chunk$set(fig.align = 'center')
 #knitr::opts_chunk$set(fig.width=7*0.8, fig.height=5*0.8)
 pacman::p_load(dplyr,knitr,kableExtra,DT,plotly)
+pacman::p_load(usethis, devtools, DemoTools, Rcpp, dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS,reshape2,XML,plyr,plotrix)
+
 
 source('aux-source.R', encoding = 'UTF-8')
 
@@ -159,7 +161,524 @@ Podemos observar que em 2000 o estado se encontrava em um período com a maior p
 
 ### Indicadores de estrutura por idade
 
-TEXTO
+```{r calculos-indicadores, echo = FALSE}
+
+pop2000 <- read_excel("data/pop2000.xltx")
+pop2010 <- read_excel("data/pop2010.xltx")
+pop2015 <- read_excel("data/pop2015.xltx")
+pop2020 <- read_excel("data/pop2020.xltx")
+pop2030 <- read_excel("data/pop2030.xltx")
+#Idade declarada
+declarada <- read_ods("data/total.ods")
+#Idade presumida
+presumida <- read_ods("data/totalpres.ods")
+#Idade pela data de nascimento
+datanasc  <- read_ods("data/totalnas.ods")
+
+#Preparando os bancos
+
+pop2015 <- na.omit(pop2015)
+pop2020 <- na.omit(pop2020)
+pop2030 <- na.omit(pop2030)
+
+#
+
+rownames(declarada) <- declarada$declarada
+declarada$declarada <- NULL
+
+rownames(presumida) <- presumida$presumida
+presumida$presumida <- NULL
+
+rownames(datanasc) <- datanasc$Dtnasc
+datanasc$Dtnasc <- NULL
+
+##################################################### 2000 ####################################################
+idosos2000 <- pop2000[13,4] + pop2000[14,4] + pop2000[15,4] + pop2000[16,4] + pop2000[17,4]
+propidosos2000 <- idosos2000/pop2000[18,4]
+#Proporção de idosos: 0.05453378
+
+propcri2000 <- pop2000[1,4]/pop2000[18,4]
+#Proporção de crianças: 0.1382662
+
+propjovem2000 <- (pop2000[1,4] + pop2000[2,4] + pop2000[3,4])/pop2000[18,4]
+#Proporção de jovens: 0.3882348
+
+inativo2000 <- pop2000[1,4] + pop2000[2,4] + pop2000[3,4] + pop2000[14,4] + pop2000[15,4] + pop2000[16,4] + pop2000[17,4]
+ativo2000 <- pop2000[4,4] + pop2000[5,4] + pop2000[6,4] + pop2000[7,4] + pop2000[8,4] + pop2000[9,4] + pop2000[10,4] + pop2000[11,4] + pop2000[12,4] +
+  pop2000[13,4]
+
+RDT2000 <- inativo2000/ativo2000
+#Razão de dependência: 0.7404956
+
+IE2000 <- propidosos2000/propjovem2000
+#Índice de envelhecimento: 0.140466
+
+teste2000 <- pop2000$Total
+teste2000  <- teste2000[1:17]
+teste2000 <- teste2000/pop2000[18,4]
+
+
+#teste2000[1] + teste2000[2] + teste2000[3] + teste2000[4]
+#0.5081539
+#Idade mediana: 15-19 anos
+
+#Idade média: 
+
+idademedia <- c(2,7,12,17,22,27,32,37,42,47,52,57,62,67,72,77,80,1)
+pop2000$media <- idademedia
+pop2000$cmedia <- pop2000$Total * pop2000$media
+
+
+media2000 <- sum(pop2000$cmedia[1:17]) / 557526
+
+#Idade média: 23.44234
+#
+#
+#
+#
+#
+##################################################### 2015 ####################################################
+idosos2015 <- pop2015[13,4] + pop2015[14,4] + pop2015[15,4] + pop2015[16,4] + pop2015[17,4]
+propidosos2015 <- idosos2015/pop2015[18,4]
+
+#Proporção de idosos: 0.06498713
+
+propcri2015 <- pop2015[1,4]/pop2015[18,4]
+
+#Proporção de crianças: 0.1068421
+
+propjovem2015 <- (pop2015[1,4] + pop2015[2,4] + pop2015[3,4])/pop2015[18,4]
+
+#Proporção de jovens: 0.3279312
+
+inativo2015 <- pop2015[1,4] + pop2015[2,4] + pop2015[3,4] + pop2015[14,4] + pop2015[15,4] + pop2015[16,4] + pop2015[17,4]
+ativo2015 <- pop2015[4,4] + pop2015[5,4] + pop2015[6,4] + pop2015[7,4] + pop2015[8,4] + pop2015[9,4] + pop2015[10,4] + pop2015[11,4] + pop2015[12,4] +
+  pop2015[13,4]
+
+RDT2015 <- inativo2015/ativo2015
+
+#Razão de dependência: 0.5880959
+
+IE2015 <- propidosos2015/propjovem2015
+
+#Índice de envelhecimento: 0.198173
+
+teste2015 <- pop2015$Total
+teste2015  <- teste2015[1:17]
+teste2015 <- teste2015/pop2015[18,4]
+
+
+#teste2015[1] + teste2015[2] + teste2015[3] + teste2015[4]+ teste2015[5]
+#0.5257177
+#Idade mediana: 20-24 anos
+
+#Idade média: 
+
+pop2015$media <- idademedia
+pop2015$cmedia <- pop2015$Total * pop2015$media
+
+media2015 <- sum(pop2015$cmedia[1:17]) / pop2015$Total[18]
+
+#Idade média: 26.42038
+
+#
+#
+#
+#
+#
+#################################################### 2020 #####################################################
+idosos2020 <- pop2020[13,4] + pop2020[14,4] + pop2020[15,4] + pop2020[16,4] + pop2020[17,4]
+propidosos2020 <- idosos2020/pop2020[18,4]
+
+#Proporção de idosos: 0.07609963
+
+propcri2020 <- pop2020[1,4]/pop2020[18,4]
+
+#Proporção de crianças: 0.09396051
+
+propjovem2020 <- (pop2020[1,4] + pop2020[2,4] + pop2020[3,4])/pop2020[18,4]
+
+#Proporção de jovens: 0.2943225
+
+inativo2020 <- pop2020[1,4] + pop2020[2,4] + pop2020[3,4] + pop2020[14,4] + pop2020[15,4] + pop2020[16,4] + pop2020[17,4]
+ativo2020 <- pop2020[4,4] + pop2020[5,4] + pop2020[6,4] + pop2020[7,4] + pop2020[8,4] + pop2020[9,4] + pop2020[10,4] + pop2020[11,4] + pop2020[12,4] +
+  pop2020[13,4]
+
+RDT2020 <- inativo2020/ativo2020
+
+#Razão de dependência: 0.5251386
+
+IE2020 <- propidosos2020/propjovem2020
+
+#Índice de envelhecimento: 0.2585587
+
+teste2020 <- pop2020$Total
+teste2020  <- teste2020[1:17]
+teste2020 <- teste2020/pop2020[18,4]
+
+
+#teste2020[1] + teste2020[2] + teste2020[3] + teste2020[4]+ teste2020[5]+ teste2020[6]
+#0.5257177
+#Idade mediana: 25-29 anos
+
+#Idade média: 
+
+pop2020$media <- idademedia
+pop2020$cmedia <- pop2020$Total * pop2020$media
+
+media2020 <- sum(pop2020$cmedia[1:17]) / pop2020$Total[18]
+
+#Idade média: 28.03636
+
+#
+#
+#
+#
+#
+#################################################### 2010 #####################################################
+idosos2010 <- pop2010[13,4] + pop2010[14,4] + pop2010[15,4] + pop2010[16,4] + pop2010[17,4]
+propidosos2010 <- idosos2010/pop2010[18,4]
+
+#Proporção de idosos: 0.06397031
+
+propcri2010 <- pop2010[1,4]/pop2010[18,4]
+
+#Proporção de crianças: 0.1054653
+
+propjovem2010 <- (pop2010[1,4] + pop2010[2,4] + pop2010[3,4])/pop2010[18,4]
+
+#Proporção de jovens: 0.3370281
+
+inativo2010 <- pop2010[1,4] + pop2010[2,4] + pop2010[3,4] + pop2010[14,4] + pop2010[15,4] + pop2010[16,4] + pop2010[17,4]
+ativo2010 <- pop2010[4,4] + pop2010[5,4] + pop2010[6,4] + pop2010[7,4] + pop2010[8,4] + pop2010[9,4] + pop2010[10,4] + pop2010[11,4] + pop2010[12,4] +
+  pop2010[13,4]
+
+RDT2010 <- inativo2010/ativo2010
+
+#Razão de dependência: 0.6135545
+
+IE2010 <- propidosos2010/propjovem2010
+
+#Índice de envelhecimento: 0.1898071
+
+teste2010 <- pop2010$Total
+teste2010  <- teste2010[1:17]
+teste2010 <- teste2010/pop2010[18,4]
+
+#Idade média: 
+
+pop2010$media <- idademedia
+pop2010$cmedia <- pop2010$Total * pop2010$media
+
+media2010 <- sum(pop2010$cmedia[1:17]) / pop2010$Total[18]
+
+#Idade média: 25.95028
+
+#Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. Comente os resultados.
+
+razao2010  <- pop2010
+razao2010[,4] <- razao2010[,4]/pull(pop2010[18,4])
+razao2010[,3] <- razao2010[,3]/pull(pop2010[18,3])
+razao2010[,2] <- razao2010[,2]/pull(pop2010[18,2])
+
+
+razao2010$razaomasc <- razao2010$Masculino/razao2010$Total
+razao2010$razaofem <- razao2010$Feminino/razao2010$Total
+
+
+#################################################### 2030 #####################################################
+idosos2030 <- pop2030[13,4] + pop2030[14,4] + pop2030[15,4] + pop2030[16,4] + pop2030[17,4]
+propidosos2030 <- idosos2030/pop2030[18,4]
+
+#Proporção de idosos: 0.105681
+
+propcri2030 <- pop2030[1,4]/pop2030[18,4]
+
+#Proporção de crianças: 0.07418269
+
+propjovem2030 <- (pop2030[1,4] + pop2030[2,4] + pop2030[3,4])/pop2030[18,4]
+
+#Proporção de jovens: 0.2356786
+
+inativo2030 <- pop2030[1,4] + pop2030[2,4] + pop2030[3,4] + pop2030[14,4] + pop2030[15,4] + pop2030[16,4] + pop2030[17,4]
+ativo2030 <- pop2030[4,4] + pop2030[5,4] + pop2030[6,4] + pop2030[7,4] + pop2030[8,4] + pop2030[9,4] + pop2030[10,4] + pop2030[11,4] + pop2030[12,4] +
+  pop2030[13,4]
+
+RDT2030 <- inativo2030/ativo2030
+
+#Razão de dependência: 0.4432296
+
+IE2030 <- propidosos2030/propjovem2030
+
+#Índice de envelhecimento: 0.4484116
+
+teste2030 <- pop2030$Total
+teste2030  <- teste2030[1:17]
+teste2030 <- teste2030/pop2030[18,4]
+
+
+#teste2030[1] + teste2030[2] + teste2030[3] + teste2030[4]+ teste2030[5]+ teste2030[6]
+#0.5378545
+#Idade mediana: 25-29 anos
+
+#Idade média: 
+
+pop2030$media <- idademedia
+pop2030$cmedia <- pop2030$Total * pop2030$media
+
+media2030 <- sum(pop2030$cmedia[1:17]) / pop2030$Total[18]
+
+#Idade média: 31.65193
+
+#Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. Comente os resultados.
+
+razao2030  <- pop2030
+razao2030[,4] <- razao2030[,4]/pull(pop2030[18,4])
+razao2030[,3] <- razao2030[,3]/pull(pop2030[18,3])
+razao2030[,2] <- razao2030[,2]/pull(pop2030[18,2])
+
+
+razao2030$razaomasc <- razao2030$Masculino/razao2030$Total
+razao2030$razaofem <- razao2030$Feminino/razao2030$Total
+
+
+idadedeclarada <- 0:(length(declarada[,1])-1)
+
+
+# Whipple Index
+# Using this assumption over a 5-year range, Whipple’s index measures heaping usually in numbers ending in zero or five. 
+# This index is a summary measure that determines variability in the quality of age reporting between regions or countries and its evolution over time.
+# Usually this index is calculated for digits 0 and 5 in adult ages 25 to 60. The uniformity assumption is less useful outside of this range.
+
+#Declarada:
+Wideclarada <-  DemoTools::check_heaping_whipple(declarada[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
+
+#  1.079055
+#
+#Presumida:
+Wipresumida <-  DemoTools::check_heaping_whipple(presumida[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
+
+# 1.427128
+#
+#Data de nascimento:
+Widatanasc <-  DemoTools::check_heaping_whipple(datanasc[,1], idadedeclarada, ageMin = 25, ageMax = 60, digit = c(0, 5))
+
+#1.063955
+
+# The result varies from 1, which means no concentration around numbers ending in zero or five, to a maximum of 5 (or 10 if only a single digit is tested). 
+# The selection of calculating the index for ages 25-60 is arbitrary but it has been found to be suitable for practical purposes (United Nations 1955)
+#[Análise]
+
+
+
+
+
+# Myers
+# The method determines the proportion of the population whose age ends in each terminal digit (0-9), also varying the particular starting age for 
+# any 10-year age group. It is based on the principle that in the absence of age heaping, the population aggregated on each terminal digits 0-9 
+# should represent roughly 10 percent of the total population.
+
+# Declarada:
+Mideclarada <- DemoTools::check_heaping_myers(declarada[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
+
+# 2.059559
+#
+# Presumida:
+Mipresumida <- DemoTools::check_heaping_myers(presumida[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
+
+# 10.88078
+#
+#Data de nascimento:
+Midatanasc <- DemoTools::check_heaping_myers(datanasc[,1], idadedeclarada, ageMin = 20, ageMax = 90) 
+
+# 1.767307
+
+
+
+# Declarada:
+Bideclarada <- DemoTools::check_heaping_bachi(declarada[,1], idadedeclarada, ageMin = 20, ageMax = 90)
+
+# 1.966324
+#
+# Presumida:
+Bipresumida <- DemoTools::check_heaping_bachi(presumida[,1], idadedeclarada, ageMin = 20, ageMax = 90)
+
+# 10.28615
+#
+#Data de nascimento:
+Bidatanasc <- DemoTools::check_heaping_bachi(datanasc[,1], idadedeclarada, ageMin = 20, ageMax = 90)
+
+
+
+bind1 <- razao2010
+
+colnames(bind1) <- c("idade","masc","fem","total","media","cmedia","razaomasc","razaofem")
+bind1$ano <- "2010"
+bind1$ano <- as.numeric(bind1$ano)
+
+bind3 <- razao2030
+
+colnames(bind3) <- c("idade","masc","fem","total","media","cmedia","razaomasc","razaofem")
+bind3$ano <- "2030"
+bind3$ano <- as.numeric(bind3$ano)
+
+
+bind <- bind_rows(bind1,bind3)
+bind["razaomasc"] <- bind["razaomasc"]*2
+
+bind$razaofem <- NULL
+
+bind["ano"] <- c(rep(2010, 18), rep(2030, 18))
+
+bind <- bind[-c(18, 36),]
+
+niveis_idade <- c(levels(as.factor(bind$idade))[1], levels(as.factor(bind$idade))[10], levels(as.factor(bind$idade))[2:9], levels(as.factor(bind$idade))[11:17])
+
+bind <- bind %>%
+  mutate(idade = factor(idade, levels = niveis_idade, labels = c('0-4', '5-9' ,'10-14', '15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79', '80+')),
+         razao = razaomasc/2)
+
+tabela_proporcoes <- tibble(
+  ano = c(2000, 2010, 2015, 2020, 2030),
+  prop_idosos = c(0.05453378, 0.06397031, 0.06498713, 0.07609963, 0.105681),
+  prop_criancas = c(0.1382662, 0.1054653, 0.1068421, 0.09396051, 0.07418269),
+  prop_jovens = c(0.3882348, 0.3370281, 0.3279312, 0.2943225, 0.2356786),
+  razao_dep = c(0.7404956, 0.6135545, 0.5880959, 0.5251386, 0.4432296),
+  ind_envel = c(0.140466, 0.1898071, 0.198173, 0.2585587, 0.4484116),
+  idade_mediana = c(17, 22, 22, 27, 27),
+  idade_media = c(23.44234, 25.95028, 26.42038, 28.03636, 31.65193)
+)
+
+
+
+# Removendo o lixo
+rm(bind1)
+rm(bind3)
+rm(n1)
+rm(agelabels)
+rm(ativo2000)
+rm(ativo2010)
+rm(ativo2015)
+rm(ativo2020)
+rm(count)
+rm(fcol)
+#rm(idadedeclarada)
+rm(idademedia)
+rm(mcol)
+rm(Mipresumida)
+rm(teste2000)
+rm(teste2010)
+rm(teste2015)
+rm(teste2020)
+rm(teste2030)
+rm(testeidade)
+rm(Wi)
+rm(Wideclarada)
+rm(get_data)
+rm(razao2010)
+rm(razao2030)
+rm(Bipresumida)
+# essas acho que poderia dar problema em remover, mas talvez não:
+rm(ativo2030)
+
+rm(datanasc)
+
+rm(piramide2000)
+rm(pop2000)
+rm(pop2010)
+rm(pop2015)
+rm(pop2020)
+rm(pop2030)
+rm(pp2000)
+rm(presumida)
+rm(idadedeclarada)
+#Essa não consegui tirar
+rm(Gênero)
+```
+
+
+A seguir são expostos em tabela os indicadores de estrutura por idade, razão de dependência e índice de envelhecimento:
+
+<br>
+
+```{r tabela-estrutura-idade}
+
+tabela_proporcoes %>%
+  kbl(align = "c", digits = 2, col.names = c('Ano', 'Prop. Idosos', 'Prop. Crianças', 'Prop. Jovens', 'Razão dep.', 'Índ. Envelhecimento', 'Id. Mediana', 'Id. Média')) %>%
+  kable_paper(full_width = T) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), position = "center")
+
+```
+
+<br>
+
+É nítido o aumento da proporção de idosos na população, evidenciado pelo índice de envelhecimento. Em contrapartida a razão de dependência tem diminuído, possívelmente pela redução da população infantil. Esta hipótese pode ser sistentada pelo aumento da idade média e mediana.
+
+A seguir a razão de sexo é exposta em gráfico, para os anos de 2010 e 2030 (projetado). É possível observar uma maior estabilidade na razao de idade superior a 1 durantes os anos iniciais de 2030, mas uma drástica queda para os anos finais de vida. Se por um lado isso pode indicar menor mortalidade masculina na população jovem, indica abrupto aumento da mortalidade na população masculina mais velha.
+
+<br>
+
+```{r graf-razaosexo}
+#Calcule e grafique a razão de sexo por grupos de idade para 2010 e 2030. :
+#USAR A SEGUINTE TÁBUA[P/GRAFICAR]:
+
+razao_sexo <- bind%>%
+  mutate(ano = as.character(ano))%>%
+  ggplot(aes(x = idade, y = razao, group = ano, color = ano))+
+  geom_line(size = 1)+
+  scale_color_manual(values = c("skyblue", "orange"), name = "Ano", labels = c("2010", "2030"))+
+  labs(x = "Grupos de idade")+
+  theme_bw()+
+  scale_x_discrete(breaks = c('0-4', '10-14', '20-24', '30-34', '40-44','50-54', '60-64',  '70-74',  '80+'))+
+  theme(axis.title.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.border = element_blank(),
+        axis.line = element_line(color = "gray"))
+
+ggplotly(razao_sexo, tooltip = c('idade', 'razao', 'ano'))
+
+```
+
+<br>
+
+Quanto à qualidade da declaração de idade, 
+
+ÍNDICES SEGUNDO FORMA DE DECLARAÇÃO:
+ Data de nascimento:
+
+- índices de Myers: 1.767307
+- índices de Whipple: 1.063955
+- índices de Bachi: 1.697535
+
+Idade presumida
+
+- índices de Myers: 10.88078
+- índices de Whipple: 1.427128
+- índices de Bachi: 10.28615
+
+
+
+
+<br>
+
+```{r piramide-idade-simples}
+xy.pop2000<- declarada$Homens
+xx.pop2000<- declarada$Mulheres
+agelabels <- rep("", 101)
+mcol<-color.gradient(c(0,0,0.5,1),c(0,0,0.5,1),c(1,1,0.5,1),18)
+fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
+
+pyramid.plot(xy.pop2000,xx.pop2000,labels = agelabels,
+             main="2000",lxcol=mcol,rxcol=fcol,
+             gap=0.5,show.values=FALSE,
+             top.labels =c("","",""),
+             unit = "Contagem")
+```
+
+
+
 
 <br>
 <br>

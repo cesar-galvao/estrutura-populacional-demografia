@@ -27,7 +27,7 @@
 library(here)
 # EXEMPLOS:
 source(here('r_docs/1a.R'), encoding = 'UTF-8')
-# source(here('r_docs/Questão 2.R'), encoding = 'UTF-8')
+#source(here('r_docs/bruno_1b1c.R'), encoding = 'UTF-8')
 # source(here('r_docs/questao2c.R'), encoding = 'UTF-8')
 # source(here('r_docs/3b-c.R'), encoding = 'UTF-8')
 # source(here('r_docs/questao3d.R'), encoding = 'UTF-8')
