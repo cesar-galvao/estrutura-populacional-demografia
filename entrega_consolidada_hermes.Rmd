@@ -1,0 +1,277 @@
+---
+author: "Ana Luiza Almeida, Bruno Gondim Toledo, César A. Galvão, Hermes Winarski"
+title: "Estudo de caso: estrutura populacional e projeções para o estado do Acre"
+subtitle: "Demografia - Profa. Ana Maria Nogales"
+date: "Brasília, Outubro/2021"
+output:
+  html_document:
+    df_print: paged
+    highlight: textmate
+    includes:
+      in_header: "./imagens/banner.html"
+    number_sections: no
+    theme: flatly
+    toc: no
+    toc_float:
+      collapsed: yes
+      smooth_scroll: yes
+---
+
+<!-- font-family: "Times New Roman", Times, serif; -->
+
+<style type="text/css">
+h1.title {
+  font-size: 37px;
+  text-align: center;
+}
+
+h3.subtitle {
+  text-align: center;
+}
+
+h4.author { /* Header 4 - and the author and data headers use this too  */
+  font-size: 18px;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+  font-size: 18px;
+  color: DarkBlue;
+  text-align: center;
+}
+
+body {
+text-align: justify
+}
+</style>
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+#knitr::opts_chunk$set(include = FALSE)
+#knitr::opts_chunk$set(fig.align = 'center')
+#knitr::opts_chunk$set(fig.width=7*0.8, fig.height=5*0.8)
+pacman::p_load(dplyr,knitr,kableExtra,DT,plotly)
+pacman::p_load(usethis, devtools, DemoTools, Rcpp, dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS,reshape2,XML,plyr,plotrix)
+
+
+source('aux-source.R', encoding = 'UTF-8')
+
+```
+
+
+
+
+<br>
+
+# {#inic .tabset}
+
+## Estrutura Populacional e avaliação da informação sobre idade
+
+### Pirâmides etárias por grupos de idade
+
+Pirâmides etárias são gráficos organizados para categorizar a população de uma determinada localidade conforme faixas de idade, dividindo-as por sexo. As barras inferiores representam a população mais jovem e as barras superiores representam a população mais velha. Essas populações estão descritas abaixo em porcentagem, sempre em relação à população total da localidade. Esses gráficos são importantes para que se possa visualizar a evolução da população e para que se possa elaborar planejamentos de políticas públicas de longo prazo.
+
+A seguir, pode-se acompanhar a evolução da população do Acre ao longo dos anos  2000, 2010, 2015, 2020 e 2030. Para todas as figuras, os nascidos homens são representados à esquerda e as nascidas mulheres são representadas à direita da pirâmide.
+
+<br>
+
+
+<br>
+
+Podemos observar que em 2000 o estado se encontrava em um período com a maior parte da população sendo de jovens e pouquissímos idosos. Isso pode configurar o Acre como na primeira fase da transição demográfica. Assim, com o passar do tempo, percebemos que população idosa cresce (em sinal de diminuição da mortalidade) e a da população infantil decresce. Até que chegamos em 2030, um ano que parece ser o período de bônus demográfico para a unidade da federação. Esse período é de quando a carga de dependência é a menor possível, ou seja, a população em idade ativa (15 anos a 60/65 anos) se sobrepõe à população dependente (0 a 15 anos e pessoas com mais de 60/65 anos). Percebemos isso, pois as porcentagens da população na idade ativa são as maiores do período. 
+
+<br>
+<br>
+
+### Indicadores de estrutura por idade
+
+
+
+A seguir são expostos em tabela os indicadores de estrutura por idade, razão de dependência e índice de envelhecimento:
+
+<br>
+
+<br>
+
+É nítido o aumento da proporção de idosos na população, evidenciado pelo índice de envelhecimento. Em contrapartida a razão de dependência tem diminuído, possívelmente pela redução da população infantil. Esta hipótese pode ser sistentada pelo aumento da idade média e mediana.
+
+A seguir a razão de sexo é exposta em gráfico, para os anos de 2010 e 2030 (projetado). É possível observar uma maior estabilidade na razao de idade superior a 1 durantes os anos iniciais de 2030, mas uma drástica queda para os anos finais de vida. Se por um lado isso pode indicar menor mortalidade masculina na população jovem, indica abrupto aumento da mortalidade na população masculina mais velha.
+
+<br>
+
+<br>
+
+### Qualidade da declaração de idade no Censo 2000
+
+Quanto à qualidade da declaração de idade, foram calculados os índices de Myers, Whipple e Bachi para a data de nascimento e para a idade presumida. Esses foram calculados usando funções do pacote `DemoTools` e suas escalas são explicadas a seguir.
+
+- **Índice de Whipple**: a função disponibilizada calcula a preferência por relatos de idades com dígitos 0 e 5, que resulta em um valor no intervalo real de 1 a 5 para nenhuma concentração a máxima concentração de relatos, respectivamente. Enquanto a idade presumida apresenta este índice a 1,42, relativamente bem distribuída, a idade calculada utilizando a data de nascimento tem valor 1,06, indicando melhor qualidade de informação.
+
+- **Índice de Myers**: a função calcula a preferencia ou evitação de algum dígito nos relatos, resultando em um valor no intervalo real de 0 a 90. Calculado para a idade presumida, o índice assume valor 10,88, enquanto assume valor 1,76 para a data de nascimento. Isso indica que há alguma preferência ou rejeição, mas pouco acentuada, por algum dígito final da idade.
+
+- **Índice de Bachi**: é similar ao índice de Myers, mas aplicado para determinar a magnitude da preferência por cada dígito final. Os resultados são muito similares ao caso anterior -- 10,28 para idade presumida e 1,69 para data de nascimento. A interpretação é análoga.
+
+A pirâmide etária para idade simples é exposta a seguir, indicando algumas concentrações de relato de idade, mas sem um destaque específico.
+
+
+<br>
+
+
+<br>
+<br>
+
+<center>[Início](#inic) </center>
+
+<br>
+<br>
+
+
+## Projeção de População
+
+### Metodologia de projeção e estimação da população
+
+Estimar e projetar a população de uma nação é de suma importâcia para que governos tenham balizadores para a criação e gestão de políticas de assistência à população que nela reside. A seguir são discutidos alguns métodos de estimação da população aplicados no Brasil. 
+
+<br>
+
+#### Metodologia utilizada para projetar a população do país segundo UF
+
+O método usado para projetar a população do país segundo UF é chamado de Método das Componentes Demográficas, o qual incorpora tendências futuras do comportamento da fecundidade, mortalidade e migração. Além disso, fornece projeções populacionais segundo sexo e grupos de idade através da equação compensadora da demografia ou equação de equilíbrio populacional. 
+
+No entanto, sua aplicação não constitui uma tarefa fácil pois, para estabelecer hipóteses a respeito do futuro das três componentes demográficas, são necessárias informações estatísticas de qualidade e, quanto menor o tamanho da população, mais difícil a obtenção de dados confiáveis. Isto se dá principalmente pela variabilidade aleatória a que estão sujeitos em pequenos domínios. Assim, o Método das Componentes não pode ser aplicado em qualquer tipo de população, mas apenas naquelas que possuem indicadores de fecundidade, mortalidade e migração consistentes. 
+
+Portanto, devido a problemas de acessibilidade a informações de qualidade em áreas mais carentes, e, como um todo, sobre a mortalidade, pode ser que esse não seja o método mais aplicável para a execução dessas projeções. 
+
+<br>
+
+#### Metodologia para estimar populações dos municípios brasileiros
+
+O método utilizado para estimar populações de municípios se chama Método AiBi, aplicado pela primeira vez no Brasil por Madeira e Simões. Nele se observa a tendência de crescimento populacional do município - entre dois censos demográficos consecutivos - em relação à tendência de crescimento de uma área geográfica de área maior. Ou seja, considera que as populações dos domínios menores são uma função linear da população do domínio maior. 
+
+A desvantagem do método é que, por não haver barreiras para as participações relativas, podem aparecer populações negativas. Então, não é recomendado utilizá-lo para projeções populacionais com prospectivas muito extensas. Na verdade, o recomendado pelo método é que o período projetado utilize informações de período do mesmo tamanho no passado. 
+
+Em teoria, esse método é recomendado quando as áreas menores estão em declínio populacional ou apresentam crescimento pequeno, assim como quando o padrão de crescimento populacional nas pequenas áreas não é o mesmo da área maior. É compreensível o seu uso para projeções dos municípios já que, em períodos curtos, ele aparenta ter todas as ferramentas necessárias para fazer essa estimação com precisão. Além disso, o fato de que as projeções de população para cada Unidade da Federação do Brasil são disponibilizadas pelo IBGE por meio do método das componentes demográficas ajuda na projeção dos municípios que se utilizam dessas áreas maiores para então chegar nas informações das áreas menores. 
+
+<br>
+
+### Projeção da população do Acre de 2010 a 2020
+
+#### Para realizar as projeções de 2015 e 2020 foi utilizida os dados do censo 2010 sobre a população do acre. Além dos indicadores de natalidade e mortalidade calculados com base nos dados do SIM e SINASC de 2019.
+
+#### {#inic .tabset}
+
+##### Censo 2010
+
+```{r }
+pop2010 %>%
+  kbl(align = "c", digits = 2) %>%
+  kable_paper(full_width = T) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), position = "center")
+```
+
+##### Projeção 2015
+
+```{r }
+pop2015 %>%
+  kbl(align = "c", digits = 2) %>%
+  kable_paper(full_width = T) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), position = "center")
+```
+
+##### Projeção 2020
+
+```{r }
+pop2020 %>%
+  kbl(align = "c", digits = 2) %>%
+  kable_paper(full_width = T) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), position = "center")
+```
+
+
+<br>
+
+###### Resultado
+
+#### Apesar das populações projetadas apresentarem uma pequena queda na quantidade absoluta de pessoas, algo que pode ser natural, elas apresentam uma queda muito grande em relação aos nascidos vivos. O que pode ser devido à má informação dos dados de fecundidade por parte do SINASC, resultando em indicadores de fecundidade ruins calculados no trabalho anterior. 
+
+<br>
+
+
+### Comparações de pirâmides etárias
+
+#### {#inic .tabset}
+
+##### Projeção IBGE 2010
+
+```{r }
+ibge_proj_2010_grafico
+```
+
+##### Projeção IBGE 2020
+
+```{r }
+ibge_proj_2020_grafico
+```
+
+##### Projeção IBGE 2060
+
+```{r }
+ibge_proj_2060_grafico
+```
+
+<br>
+
+###### Resultados
+
+#### Verficando as pirâmides etárias projetadas pelo IBGE para os anos de 2010, 2020 e 2060 vemos que o maior pico de nascidos vivos do Acre já passou, e essa quantidade tende a ser menor a cada ano que passa. Apesar disso, por conta da inércia demográfica, a população desse estado tende a continuar crescendo de forma cada vez mais lenta, até o momente em que finalmente o número de óbitos da população será superior ao de nascidos vivos.
+
+<br>
+
+### Comparações das projeções obtidas com as do IBGE
+
+#### {#inic .tabset}
+
+##### Comparação 2010
+
+```{r }
+comparacao_2010
+```
+
+##### Comparação 2015
+
+```{r }
+comparacao_2015
+```
+
+##### Comparação 2020
+
+```{r }
+comparacao_2020
+```
+
+<br>
+
+###### Resultados
+
+#### A projeção do IBGE para 2010 quando comparada com o censo 2010, apresenta a quantidade de população superior ao esperado em todas as faixas etárias.
+
+#### Nas comparações de 2015 e 2020, como já foi dito, as projeções realizadas neste documento apresentam um número muito pequeno de nascidos vivos. Apesar disso, a população estimada pelo IBGE nas outras faixa etárias é sempre um pouco superior. O que pode se dar pela superioridade encontrada quando comparada com os dados do censo.
+
+<br>
+
+
+
+<br>
+<br>
+
+<center>[Início](#inic) </center>
+
+<br>
+<br>
+
+
+
+
