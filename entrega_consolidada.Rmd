@@ -54,7 +54,7 @@ knitr::opts_chunk$set(warning = FALSE)
 #knitr::opts_chunk$set(fig.align = 'center')
 #knitr::opts_chunk$set(fig.width=7*0.8, fig.height=5*0.8)
 pacman::p_load(dplyr,knitr,kableExtra,DT,plotly)
-pacman::p_load(usethis, devtools, DemoTools, Rcpp, dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS,reshape2,XML,plyr,plotrix)
+pacman::p_load(usethis, devtools, DemoTools, Rcpp, dplyr, stringr,foreign,tidyverse,ggplot2,factoextra,readxl,readODS,reshape2,XML,plyr,plotrix, cowplot)
 
 
 source('aux-source.R', encoding = 'UTF-8')
@@ -108,7 +108,7 @@ fcol<-color.gradient(c(1,1,0.5,1),c(0.5,0.5,0.5,1),c(0.5,0.5,0.5,1),18)
 par(mar=pyramid.plot(xy.pop2010,xx.pop2010,labels=agelabels,
                      main="2010",lxcol=mcol,rxcol=fcol,
                      gap=0.5,show.values=TRUE,
-                    top.labels =c("","","")))
+                    top.labels = c("","","")))
 
 #2015
 xy.pop2015<- pop2015$`Porcentagem M`
@@ -711,22 +711,120 @@ Em teoria, esse método é recomendado quando as áreas menores estão em declí
 
 ### Projeção da população do Acre de 2010 a 2020
 
+Para realizar as projeções de 2015 e 2020 foram utilizidos os dados do censo 2010 sobre a população do Acre, além dos indicadores de natalidade e mortalidade calculados com base nos dados do SIM e SINASC de 2019.
+
+Apesar de as populações projetadas apresentarem uma pequena queda na quantidade absoluta de pessoas, algo que pode ser natural, elas apresentam uma queda muito grande em relação aos nascidos vivos. Isto pode ser devido à qualidade dos dados de fecundidade por parte do SINASC, resultando em indicadores ruins na tábua de fecundidade utilizada para calcular as projeções.
+
+As tabelas correspondentes são expostas a seguir.
 
 <br>
 
-TEXTO
+#### {#inic .tabset}
+
+##### Censo 2010
+
+```{r}
+source('source_hermes.R', encoding = 'UTF-8')
+```
+
+
+<br>
+
+```{r }
+
+pop2010 %>%
+  kbl(align = "c", digits = 2) %>%
+  kable_paper(full_width = T) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), position = "center")
+```
+
+##### Projeção 2015
+
+```{r }
+pop2015 %>%
+  kbl(align = "c", digits = 2) %>%
+  kable_paper(full_width = T) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), position = "center")
+```
+
+##### Projeção 2020
+
+```{r }
+pop2020 %>%
+  kbl(align = "c", digits = 2) %>%
+  kable_paper(full_width = T) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), position = "center")
+```
+
+####
+
+<br>
 
 <br>
 
 
 ### Comparações de pirâmides etárias
 
+É possível verificar nas pirâmides etárias projetadas pelo IBGE para os anos de 2010, 2020 e 2060 que o maior pico de nascidos vivos do Acre já passou, e essa quantidade tende a ser menor a cada ano que passa. Apesar disso, devido à  inércia demográfica, a população desse estado tende a continuar crescendo de forma cada vez mais lenta, até o momento em que finalmente o número de óbitos da população será superior ao de nascidos vivos.
 
 <br>
 
-TEXTO
+```{r, fig.align = 'center'}
+ibge_proj_2010_grafico <- ibge_proj_2010_grafico+
+  scale_x_discrete(breaks = c('0-4', '10-14', '20-24', '30-34', '40-44','50-54', '60-64',  '70-74',  '80-84', '90+'))+
+  scale_fill_manual(values = c("skyblue", "orange"))+
+  labs(title = "")+
+  theme(legend.position = "none", legend.title = element_blank())
+
+ibge_proj_2020_grafico <- ibge_proj_2020_grafico+
+  scale_x_discrete(breaks = c('0-4', '10-14', '20-24', '30-34', '40-44','50-54', '60-64',  '70-74',  '80-84', '90+'))+
+  scale_fill_manual(values = c("skyblue", "orange"))+
+  labs(title = "")+
+  theme(legend.position = "none", legend.title = element_blank())
+
+ibge_proj_2060_grafico <- ibge_proj_2060_grafico+
+  scale_x_discrete(breaks = c('0-4', '10-14', '20-24', '30-34', '40-44','50-54', '60-64',  '70-74',  '80-84', '90+'))+
+  scale_fill_manual(values = c("skyblue", "orange"))+
+  labs(title = "")+
+  theme(legend.position = "none", legend.title = element_blank())
+
+plot_grid(ibge_proj_2010_grafico, ibge_proj_2020_grafico, ibge_proj_2060_grafico, labels = c('2010', '2020', '2060'))
+```
+
 
 <br>
+
+<br>
+
+### Comparações das projeções obtidas com as do IBGE
+
+A projeção do IBGE para 2010, quando comparada ao censo 2010, apresenta a quantidade de população superior ao esperado em todas as faixas etárias.
+
+Nas comparações de 2015 e 2020, como já foi dito, as projeções realizadas neste documento apresentam um número muito pequeno de nascidos vivos. Apesar disso, a população estimada pelo IBGE nas outras faixa etárias é sempre um pouco superior, o que pode se dar pela superioridade encontrada quando comparada com os dados do censo.
+
+<br>
+
+#### {#inic .tabset}
+
+##### Comparação 2010
+
+```{r }
+comparacao_2010
+```
+
+##### Comparação 2015
+
+```{r }
+comparacao_2015
+```
+
+##### Comparação 2020
+
+```{r }
+comparacao_2020
+```
+
+####
 
 
 

@@ -151,10 +151,13 @@ le_dados_cria_piramide <- function(ano, acao){
                   geom_bar(data = subset(proj_ibge, sexo == "Feminino"), stat = "identity") + 
                   geom_bar(data = subset(proj_ibge, sexo == "Masculino"), stat = "identity") + 
                   scale_y_continuous(labels = paste0(as.character(c(seq(5000, 0, -2500), seq(2500, 5000, 2500))), "")) + 
-                  labs(title = str_c("Pirâmide Etária Projeção IBGE - Acre ", ano),
+                  labs(title = "",
                   x = "Faixa Etária",
                   y = "População")+
-                  coord_flip()+ theme_classic()
+                  coord_flip()+ 
+     scale_x_discrete(breaks = c('0-4', '10-14', '20-24', '30-34', '40-44','50-54', '60-64',  '70-74',  '80-84', '90+'))+
+     theme_classic()+
+     theme(legend.position = "none", legend.title = element_blank())
   
     return(grafico)
   }
