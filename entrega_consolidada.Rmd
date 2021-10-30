@@ -72,8 +72,6 @@ source('aux-source.R', encoding = 'UTF-8')
 
 ### Pirâmides etárias por grupos de idade
 
-<br>
-
 Pirâmides etárias são gráficos organizados para categorizar a população de uma determinada localidade conforme faixas de idade, dividindo-as por sexo. As barras inferiores representam a população mais jovem e as barras superiores representam a população mais velha. Essas populações estão descritas abaixo em porcentagem, sempre em relação à população total da localidade. Esses gráficos são importantes para que se possa visualizar a evolução da população e para que se possa elaborar planejamentos de políticas públicas de longo prazo.
 
 A seguir, pode-se acompanhar a evolução da população do Acre ao longo dos anos  2000, 2010, 2015, 2020 e 2030. Para todas as figuras, os nascidos homens são representados à esquerda e as nascidas mulheres são representadas à direita da pirâmide.
@@ -643,27 +641,22 @@ ggplotly(razao_sexo, tooltip = c('idade', 'razao', 'ano'))
 
 <br>
 
-Quanto à qualidade da declaração de idade, 
+### Qualidade da declaração de idade no Censo 2000
 
-ÍNDICES SEGUNDO FORMA DE DECLARAÇÃO:
- Data de nascimento:
+Quanto à qualidade da declaração de idade, foram calculados os índices de Myers, Whipple e Bachi para a data de nascimento e para a idade presumida. Esses foram calculados usando funções do pacote `DemoTools` e suas escalas são explicadas a seguir.
 
-- índices de Myers: 1.767307
-- índices de Whipple: 1.063955
-- índices de Bachi: 1.697535
+- **Índice de Whipple**: a função disponibilizada calcula a preferência por relatos de idades com dígitos 0 e 5, que resulta em um valor no intervalo real de 1 a 5 para nenhuma concentração a máxima concentração de relatos, respectivamente. Enquanto a idade presumida apresenta este índice a 1,42, relativamente bem distribuída, a idade calculada utilizando a data de nascimento tem valor 1,06, indicando melhor qualidade de informação.
 
-Idade presumida
+- **Índice de Myers**: a função calcula a preferencia ou evitação de algum dígito nos relatos, resultando em um valor no intervalo real de 0 a 90. Calculado para a idade presumida, o índice assume valor 10,88, enquanto assume valor 1,76 para a data de nascimento. Isso indica que há alguma preferência ou rejeição, mas pouco acentuada, por algum dígito final da idade.
 
-- índices de Myers: 10.88078
-- índices de Whipple: 1.427128
-- índices de Bachi: 10.28615
+- **Índice de Bachi**: é similar ao índice de Myers, mas aplicado para determinar a magnitude da preferência por cada dígito final. Os resultados são muito similares ao caso anterior -- 10,28 para idade presumida e 1,69 para data de nascimento. A interpretação é análoga.
 
-
+A pirâmide etária para idade simples é exposta a seguir, indicando algumas concentrações de relato de idade, mas sem um destaque específico.
 
 
 <br>
 
-```{r piramide-idade-simples}
+```{r piramide-idade-simples, fig.align='center'}
 xy.pop2000<- declarada$Homens
 xx.pop2000<- declarada$Mulheres
 agelabels <- rep("", 101)
@@ -677,15 +670,6 @@ pyramid.plot(xy.pop2000,xx.pop2000,labels = agelabels,
              unit = "Contagem")
 ```
 
-
-
-
-<br>
-<br>
-
-### Qualidade da declaração de idade no Censo 2000
-
-TEXTO
 
 
 <br>
