@@ -40,15 +40,16 @@ pop2010 <- pop2010[c(1:nrow(pop2010)-1),]
 
 
 projeta_pop <- function(tabua_fem, tabua_masc, pop_entrada){
-  projeta <- function(pop0, tabua, sex, pop_entrada = pop2010, cont = 1, projecao = 1){
+  projeta <- function(pop0, tabua, sex, cont = 1, projecao = 1, pop_entrada = pop_entrada){
   #___________________________________ Projetando população 80+
   
     if(cont == nrow(pop0)){
       if (sex == "Feminino"){
-        return((pop_entrada$Feminino[16]+pop_entrada$Feminino[17]) * tabua$nPx[18])
+        return((round(pop_entrada$Feminino[16]+pop_entrada$Feminino[17] * tabua$nPx[18])))
       }
-      else if (sex == "Masculino")
-        return((pop_entrada$Masculino[16]+pop_entrada$Masculino[17]) * tabua$nPx[18])
+      else if (sex == "Masculino"){
+        return((round(pop_entrada$Masculino[16]+pop_entrada$Masculino[17] * tabua$nPx[18])))
+      }
     }
   #___________________________________ Projetando nascidos vivos
   
@@ -60,10 +61,10 @@ projeta_pop <- function(tabua_fem, tabua_masc, pop_entrada){
                                                                  "35 a 39 anos", "40 a 44 anos", "45 a 49 anos"))
         nasc <- (((temp1$Feminino + temp2$Feminino)/2) * fecundidade$nfx) %>% sum()
         if (sex == "Feminino"){
-          return(c(5*nasc*0.4878, projeta(pop0, tabua, sex, cont = cont + 1)))
+          return(c(round(5*nasc*0.4878), projeta(pop0, tabua, sex, cont = cont + 1, pop_entrada = pop_entrada)))
         }
         else if (sex == "Masculino"){
-          return(c(5*nasc*0.5122, projeta(pop0, tabua, sex, cont = cont + 1)))
+          return(c(round(5*nasc*0.5122), projeta(pop0, tabua, sex, cont = cont + 1, pop_entrada = pop_entrada)))
         }
       }
       else if (projecao == 2){
@@ -75,10 +76,10 @@ projeta_pop <- function(tabua_fem, tabua_masc, pop_entrada){
                                                                  "35 a 39 anos", "40 a 44 anos", "45 a 49 anos"))
         nasc <- (((temp1$Feminino + temp2$Feminino + temp2$Feminino)/3) * fecundidade$nfx) %>% sum()
         if (sex == "Feminino"){
-          return(c(5*nasc*0.4878, projeta(pop0, tabua, sex, cont = cont + 1)))
+          return(c(round(5*nasc*0.4878), projeta(pop0, tabua, sex, cont = cont + 1, pop_entrada = pop_entrada)))
         }
         else if (sex == "Masculino"){
-          return(c(5*nasc*0.5122, projeta(pop0, tabua, sex, cont = cont + 1)))
+          return(c(round(5*nasc*0.5122), projeta(pop0, tabua, sex, cont = cont + 1, pop_entrada = pop_entrada)))
         }
       }
     }
@@ -86,12 +87,12 @@ projeta_pop <- function(tabua_fem, tabua_masc, pop_entrada){
       
       else {
         if (sex == "Feminino"){
-          return(c(pop_entrada$Feminino[cont] * tabua_fem$nPx[!is.na(tabua_fem$nPx)][cont],
-                   projeta(pop0, tabua, sex, cont = cont + 1)))
+          return(c(round(pop_entrada$Feminino[cont] * tabua_fem$nPx[!is.na(tabua_fem$nPx)][cont]),
+                   projeta(pop0, tabua, sex, cont = cont + 1, pop_entrada = pop_entrada)))
         }
         if (sex == "Masculino"){
-          return(c(pop_entrada$Masculino[cont] * tabua_masc$nPx[!is.na(tabua_masc$nPx)][cont],
-                   projeta(pop0, tabua, sex, cont = cont + 1)))
+          return(c(round(pop_entrada$Masculino[cont] * tabua_masc$nPx[!is.na(tabua_masc$nPx)][cont]),
+                   projeta(pop0, tabua, sex, cont = cont + 1, pop_entrada = pop_entrada)))
         }
         }
         
@@ -99,11 +100,11 @@ projeta_pop <- function(tabua_fem, tabua_masc, pop_entrada){
 
     pop_saida <- data.frame(`Faixa Etária detalhada` = pop2010$`Faixa Etária detalhada`[1:nrow(pop2010)])
 
-    pop_saida$Feminino <- projeta(pop0 = pop_saida, tabua = tabua_fem, sex = "Feminino", cont = 1, projecao = projec)
-    pop_saida$Feminino <- projeta(pop0 = pop_saida, tabua = tabua_fem, sex = "Feminino", cont = 1, projecao = projec)
+    pop_saida$Feminino <- projeta(pop0 = pop_saida, tabua = tabua_fem, sex = "Feminino", cont = 1, projecao = projec, pop_entrada = pop_entrada)
+    pop_saida$Feminino <- projeta(pop0 = pop_saida, tabua = tabua_fem, sex = "Feminino", cont = 1, projecao = projec, pop_entrada = pop_entrada)
     
-    pop_saida$Masculino <- projeta(pop0 = pop_saida, tabua = tabua_masc, sex = "Masculino", cont = 1, projecao = projec)
-    pop_saida$Masculino <- projeta(pop0 = pop_saida, tabua = tabua_masc, sex = "Masculino", cont = 1, projecao = projec)
+    pop_saida$Masculino <- projeta(pop0 = pop_saida, tabua = tabua_masc, sex = "Masculino", cont = 1, projecao = projec, pop_entrada = pop_entrada)
+    pop_saida$Masculino <- projeta(pop0 = pop_saida, tabua = tabua_masc, sex = "Masculino", cont = 1, projecao = projec, pop_entrada = pop_entrada)
 
     pop_saida$Total <- pop_saida$Masculino + pop_saida$Feminino 
     
@@ -231,5 +232,5 @@ comparacao_2020 <- compara_tabela( pop2020, ibge_proj_2020_tabela)
 
 rm(fecundidade, tabua_fem, tabua_masc, projec, calcula_npx, projeta_pop, 
    le_dados_cria_piramide, compara_tabela)
-comparacao_2010
+
    
